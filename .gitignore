@@ -1,0 +1,4 @@
+veracode-pipeline-results.json
+test/*.zip
+out/
+node_modules/
