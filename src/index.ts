@@ -16,6 +16,7 @@ if (process.argv.length == 3) {
         let fileUrl = url.pathToFileURL(process.argv[2]);
         runPipelineScan(fileUrl);
     } catch(error){
+		console.log('Usage: unofficial-veracode-pipeline-scan <file-to-scan>');
         console.log(error.message);
     }
 }
