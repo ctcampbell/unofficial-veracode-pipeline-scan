@@ -11,7 +11,7 @@
     "test": "zip test/scannable.js.zip test/scannable.js && npm run veracode-pipeline test/scannable.js.zip"
   },
   "bin": {
-    "veracode-pipeline-scan": "out/index.js"
+    "unofficial-veracode-pipeline-scan": "out/index.js"
   },
   "author": "",
   "license": "MIT",
