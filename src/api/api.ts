@@ -31,8 +31,8 @@ const config = new ConfigParser();
 const veracodeCredsFile = path.join(os.homedir(), '.veracode', 'credentials');
 config.read(veracodeCredsFile);
 const authProfile = process.env.VERACODE_API_PROFILE || 'default';
-const id = config.get(authProfile, 'veracode_api_key_id');
-const key = config.get(authProfile, 'veracode_api_key_secret');
+const id = process.env.VERACODE_API_KEY_ID || config.get(authProfile, 'veracode_api_key_id');
+const key = process.env.VERACODE_API_KEY_SECRET || config.get(authProfile, 'veracode_api_key_secret');
 
 globalAxios.interceptors.request.use(function (config) {
     if (config.url && config.method) {
