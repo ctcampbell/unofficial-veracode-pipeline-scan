@@ -1,4 +1,3 @@
-import * as sjcl from 'sjcl';
 import * as util from 'util';
 import * as crypto from 'crypto';
 
@@ -6,18 +5,9 @@ function getAuthorizationScheme() { return "VERACODE-HMAC-SHA-256"; }
 function getRequestVersion() { return "vcode_request_version_1"; }
 function getNonceSize() { return 16; }
 
-// function computeHash(message: string, key: string) {
-//     var key_bits = sjcl.codec.utf8String.toBits(key);
-//     var hmac_bits = (new sjcl.misc.hmac(key_bits, sjcl.hash.sha256)).mac(message);
-//     var hmac = sjcl.codec.hex.fromBits(hmac_bits);
-//     return hmac;
-// }
-
 function computeHashHex(message: string, key_hex: string) {
-    var key_bits = sjcl.codec.hex.toBits(key_hex);
-    var hmac_bits = (new sjcl.misc.hmac(key_bits, sjcl.hash.sha256)).mac(message);
-    var hmac = sjcl.codec.hex.fromBits(hmac_bits);
-    return hmac;
+    let key = Buffer.from(key_hex, 'hex');
+    return crypto.createHmac('sha256', key).update(message).digest('hex');
 }
 
 function calulateDataSignature(apiKeyBytes: string, nonceBytes: string, dateStamp: string, data: string) {
@@ -33,7 +23,7 @@ function newNonce(size: number) {
 }
 
 function toHexBinary(input: string) {
-    return sjcl.codec.hex.fromBits(sjcl.codec.utf8String.toBits(input));
+    return Buffer.from(input).toString('hex');
 }
 
 export function calculateAuthorizationHeader(id: string, key: string, hostName: string, uriString: string, urlQueryParams: string, httpMethod: string) {
