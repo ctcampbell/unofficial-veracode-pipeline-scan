@@ -1,6 +1,6 @@
 {
   "name": "unofficial-veracode-pipeline-scan",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Unofficial Veracode Pipeline Scan",
   "repository": {
     "url": "https://github.com/ctcampbell/unofficial-veracode-pipeline-scan"

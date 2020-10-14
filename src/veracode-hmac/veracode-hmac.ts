@@ -1,9 +1,8 @@
-import * as util from 'util';
 import * as crypto from 'crypto';
 
-function getAuthorizationScheme() { return "VERACODE-HMAC-SHA-256"; }
-function getRequestVersion() { return "vcode_request_version_1"; }
-function getNonceSize() { return 16; }
+const authorizationScheme = "VERACODE-HMAC-SHA-256";
+const requestVersion = "vcode_request_version_1";
+const nonceSize = 16;
 
 function computeHashHex(message: string, key_hex: string) {
     let key = Buffer.from(key_hex, 'hex');
@@ -11,10 +10,10 @@ function computeHashHex(message: string, key_hex: string) {
 }
 
 function calulateDataSignature(apiKeyBytes: string, nonceBytes: string, dateStamp: string, data: string) {
-    var kNonce = computeHashHex(nonceBytes, apiKeyBytes);
-    var kDate = computeHashHex(dateStamp, kNonce);
-    var kSig = computeHashHex(getRequestVersion(), kDate);
-    var kFinal = computeHashHex(data, kSig);
+    let kNonce = computeHashHex(nonceBytes, apiKeyBytes);
+    let kDate = computeHashHex(dateStamp, kNonce);
+    let kSig = computeHashHex(requestVersion, kDate);
+    let kFinal = computeHashHex(data, kSig);
     return kFinal;
 }
 
@@ -28,11 +27,11 @@ function toHexBinary(input: string) {
 
 export function calculateAuthorizationHeader(id: string, key: string, hostName: string, uriString: string, urlQueryParams: string, httpMethod: string) {
     uriString += urlQueryParams;
-    var data = util.format("id=%s&host=%s&url=%s&method=%s", id, hostName, uriString, httpMethod);
-    var dateStamp = Date.now().toString();
-    var nonceBytes = newNonce(getNonceSize());
-    var dataSignature = calulateDataSignature(key, nonceBytes, dateStamp, data);
-    var authorizationParam = util.format("id=%s,ts=%s,nonce=%s,sig=%s", id, dateStamp, toHexBinary(nonceBytes), dataSignature.toUpperCase());
-    var header = getAuthorizationScheme() + " " + authorizationParam;
+    let data = `id=${id}&host=${hostName}&url=${uriString}&method=${httpMethod}`;
+    let dateStamp = Date.now().toString();
+    let nonceBytes = newNonce(nonceSize);
+    let dataSignature = calulateDataSignature(key, nonceBytes, dateStamp, data);
+    let authorizationParam = `id=${id},ts=${dateStamp},nonce=${toHexBinary(nonceBytes)},sig=${dataSignature.toUpperCase()}`;
+    let header = authorizationScheme + " " + authorizationParam;
     return header;
 }
