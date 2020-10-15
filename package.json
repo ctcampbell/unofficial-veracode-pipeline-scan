@@ -1,6 +1,6 @@
 {
   "name": "unofficial-veracode-pipeline-scan",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Unofficial Veracode Pipeline Scan",
   "repository": {
     "url": "https://github.com/ctcampbell/unofficial-veracode-pipeline-scan"
@@ -8,7 +8,8 @@
   "main": "out/index.js",
   "scripts": {
     "compile": "tsc -p ./",
-    "test": "zip test/scannable.js.zip test/scannable.js && unofficial-veracode-pipeline-scan test/scannable.js.zip"
+    "test": "npm run compile && zip test/scannable.js.zip test/scannable.js && npm run scan test/scannable.js.zip",
+    "scan": "node out/index.js"
   },
   "bin": {
     "unofficial-veracode-pipeline-scan": "out/index.js"
